@@ -50,11 +50,11 @@ async function run() {
       );
 
       if (daysUntilDueDate <= 7 && daysUntilDueDate > 0) {
-        removeDueLabels(issue.number);
+        await removeDueLabels(issue.number);
         await ok.addLabelToIssue(issue.number, [constants.NEXT_WEEK_TAG_NAME]);
         console.log('\tokaddingnextweektag');
       } else if (daysUntilDueDate <= 0) {
-        removeDueLabels(issue.number);
+        await removeDueLabels(issue.number);
         await ok.addLabelToIssue(issue.number, [constants.OVERDUE_TAG_NAME]);
         console.log('\tokaddingoverduetag');
       } else {
