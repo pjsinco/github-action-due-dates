@@ -3,6 +3,7 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const moment = require('moment-timezone');
 const constants = require('./constants');
+const fm = require('front-matter');
 
 // OVERDUE_TAG_NAME, NEXT_WEEK_TAG_NAME
 
