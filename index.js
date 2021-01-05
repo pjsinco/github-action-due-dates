@@ -1,11 +1,11 @@
 const Octokit = require('./Octokit');
 const core = require('@actions/core');
 const github = require('@actions/github');
-const moment = require('moment');
+const moment = require('moment-timezone');
 
 function hoursToDue(date) {
-  const eventDate = moment(date);
-  const today = moment();
+  const eventDate = moment(date).tz('America/Chicago');
+  const today = moment().tz('America/Chicago');
   return eventDate.diff(today, 'hours');
 }
 
