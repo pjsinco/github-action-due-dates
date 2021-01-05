@@ -35,34 +35,45 @@ async function run() {
 
     const issues = await ok.listAllOpenIssues();
 
-    const results = await ok.getIssuesWithDueDate(issues);
-
+    //const results = ok.getIssuesWithDueDate(issues);
     //console.log('okissueswithduedates', results);
+
     // TODO debugging only
     const today = moment().tz('America/Chicago');
 
-    for (const issue of results) {
-      const daysUntilDueDate = getDaysUntilDue(issue.due);
-      const dueDate = moment(issue.due).tz('America/Chicago');
+    for (const issue of issue) {
+      const meta = fm(issue.body);
 
-      console.log(issue);
+      const due =
+        meta.attributes && (meta.attributes.due || meta.attributes.Due);
 
-      // TODO debugging only
-      console.log(
-        issue.title,
-        `\tDue on ${dueDate}, in ${daysUntilDueDate} days. Today is ${today}.`
-      );
+      // If we have a due date, process the issue
+      if (meta.attributes && due) {
+        const daysUntilDueDate = getDaysUntilDue(due);
+        const dueDate = moment(due).tz('America/Chicago');
 
-      if (daysUntilDueDate <= 7 && daysUntilDueDate >= 0) {
-        await removeDueLabels(issue.number);
-        await ok.addLabelToIssue(issue.number, [constants.NEXT_WEEK_TAG_NAME]);
-        console.log('\tokaddingnextweektag');
-      } else if (daysUntilDueDate < 0) {
-        await removeDueLabels(issue.number);
-        await ok.addLabelToIssue(issue.number, [constants.OVERDUE_TAG_NAME]);
-        console.log('\tokaddingoverduetag');
+        // TODO debugging only
+        console.log(
+          issue.title,
+          `\tDue on ${dueDate}, in ${daysUntilDueDate} days. Today is ${today}.`
+        );
+
+        if (daysUntilDueDate <= 7 && daysUntilDueDate >= 0) {
+          await removeDueLabels(issue.number);
+          await ok.addLabelToIssue(issue.number, [
+            constants.NEXT_WEEK_TAG_NAME,
+          ]);
+          console.log('\tokaddingnextweektag');
+        } else if (daysUntilDueDate < 0) {
+          await removeDueLabels(issue.number);
+          await ok.addLabelToIssue(issue.number, [constants.OVERDUE_TAG_NAME]);
+          console.log('\tokaddingoverduetag');
+        } else {
+          console.log('\tokwereintheelseclause');
+          await removeDueLabels(issue.number);
+        }
       } else {
-        console.log('\tokwereintheelseclause');
+        // For issues with no due date, remove any due labels
         await removeDueLabels(issue.number);
       }
     }

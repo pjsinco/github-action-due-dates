@@ -62,18 +62,18 @@ module.exports = class Octokit {
     }
   }
 
-  async getIssuesWithDueDate(rawIssues) {
-    return rawIssues.filter(issue => {
-      // TODO: Move into utils
-      const meta = fm(issue.body);
-
-      const due =
-        meta.attributes && (meta.attributes.due || meta.attributes.Due);
-      if (meta.attributes && due) {
-        return Object.assign(issue, { due });
-      }
-    });
-  }
+  //  getIssuesWithDueDate(rawIssues) {
+  //    return rawIssues.filter(issue => {
+  //      // TODO: Move into utils
+  //      const meta = fm(issue.body);
+  //
+  //      const due =
+  //        meta.attributes && (meta.attributes.due || meta.attributes.Due);
+  //      if (meta.attributes && due) {
+  //        return Object.assign(issue, { due });
+  //      }
+  //    });
+  //  }
 
   async getOverdueIssues(rawIssues) {
     return rawIssues.filter(issue => {
