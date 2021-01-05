@@ -1,6 +1,13 @@
 const Octokit = require('./Octokit');
 const core = require('@actions/core');
 const github = require('@actions/github');
+const moment = require('moment');
+
+function hoursToDue(date) {
+  const eventDate = moment(date);
+  const today = moment();
+  return eventDate.diff(today, 'hours');
+}
 
 const context = github.context;
 
@@ -20,7 +27,15 @@ async function run() {
       context.repo.repo
     );
 
-    console.log('okissues', issues);
+    const results = await ok.getIssuesWithDueDate(issues);
+
+    console.log('okissueswithduedates', results);
+
+    for (const issue of results) {
+      const hoursUntilDueDate = hoursToDue(issue.due);
+      console.log('okissuewithaduedate');
+      console.log(`\tDue on ${issue.due}, in ${hoursUntilDueDate} hours`);
+    }
   } catch (err) {
     core.setFailed(err.message);
   }
