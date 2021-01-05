@@ -14,7 +14,6 @@ const context = github.context;
 async function run() {
   try {
     const githubToken = core.getInput('GH_TOKEN');
-    console.log(githubToken);
 
     if (!githubToken) {
       throw new Error('Missing GH_TOKEN environment variable');
@@ -29,12 +28,17 @@ async function run() {
 
     const results = await ok.getIssuesWithDueDate(issues);
 
-    console.log('okissueswithduedates', results);
+    //console.log('okissueswithduedates', results);
 
     for (const issue of results) {
       const hoursUntilDueDate = hoursToDue(issue.due);
-      console.log('okissuewithaduedate');
-      console.log(`\tDue on ${issue.due}, in ${hoursUntilDueDate} hours`);
+      console.log(issue.title);
+      const dueDate = moment(issue.due)
+        .utcOffset(-6)
+        .format('YYYY-MM-DD');
+      console.log(
+        `\tDue on ${dueDate} (compare with ${issue.due}), in ${hoursUntilDueDate} hours`
+      );
     }
   } catch (err) {
     core.setFailed(err.message);
