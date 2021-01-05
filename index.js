@@ -59,7 +59,7 @@ async function run() {
         console.log('\tokaddingoverduetag');
       } else {
         console.log('\tokwereintheelseclause');
-        //removeDueLabels();
+        await removeDueLabels();
       }
     }
   } catch (err) {
