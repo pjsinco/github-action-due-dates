@@ -41,7 +41,7 @@ async function run() {
     // TODO debugging only
     const today = moment().tz('America/Chicago');
 
-    for (const issue of issue) {
+    for (const issue of issues) {
       const meta = fm(issue.body);
 
       const due =
