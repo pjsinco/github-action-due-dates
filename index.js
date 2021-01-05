@@ -2,6 +2,8 @@ const Octokit = require('./Octokit');
 const core = require('@actions/core');
 const github = require('@actions/github');
 
+const context = github.context;
+
 async function run() {
   try {
     const githubToken = core.getInput('GH_TOKEN');
