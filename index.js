@@ -4,8 +4,8 @@ const github = require('@actions/github');
 const moment = require('moment');
 
 function hoursToDue(date) {
-  const eventDate = moment(date).tz('America/Chicago');
-  const today = moment().tz('America/Chicago');
+  const eventDate = moment(date).utcOffset(-6);
+  const today = moment().utcOffset(-6);
   return eventDate.diff(today, 'hours');
 }
 
