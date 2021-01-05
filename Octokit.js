@@ -4,43 +4,54 @@ const fm = require('front-matter');
 const OVERDUE_TAG_NAME = require('./constants').OVERDUE_TAG_NAME;
 
 module.exports = class Octokit {
-  constructor(token) {
+  constructor(token, owner, repo) {
     this.client = github.getOctokit(token);
+    this.owner = owner;
+    this.repo = repo;
   }
 
-  async listAllOpenIssues(owner, repo) {
+  async listAllOpenIssues() {
     const { data } = await this.client.issues.listForRepo({
-      owner,
-      repo,
+      owner: this.owner,
+      repo: this.repo,
       state: 'open',
     });
     return data;
   }
 
-  async get(owner, repo, issueNumber) {
+  async get(issueNumber) {
     const { data } = await this.client.issues.get({
-      owner,
-      repo,
+      owner: this.owner,
+      repo: this.repo,
       issue_number: issueNumber,
     });
     return data;
   }
 
-  async addLabelToIssue(owner, repo, issueNumber, labels) {
+  async hasDueDateLabels(issueNumber) {
+    const { data } = await this.client.issues.listLabelsOnIssue({
+      owner: this.owner,
+      repo: this.repo,
+      issueNumber,
+    });
+    return data;
+  }
+
+  async addLabelToIssue(issueNumber, labels) {
     const { data } = await this.client.issues.addLabels({
-      owner,
-      repo,
+      owner: this.owner,
+      repo: this.repo,
       issue_number: issueNumber,
       labels,
     });
     return data;
   }
 
-  async removeLabelFromIssue(owner, repo, name, issue_number) {
+  async removeLabelFromIssue(name, issue_number) {
     try {
       const { data } = await this.client.issues.removeLabel({
-        owner,
-        repo,
+        owner: this.owner,
+        repo: this.repo,
         name,
         issue_number,
       });
