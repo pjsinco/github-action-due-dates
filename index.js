@@ -25,6 +25,10 @@ async function run() {
     const ok = new Octokit(githubToken, context.repo.owner, context.repo.repo);
 
     async function removeDueLabels(issueNumber) {
+      if (typeof issueNumber === 'undefined') {
+        throw new Error('Cannot remove due labels: Missing issue number');
+      }
+
       await ok.removeLabelFromIssue(constants.NEXT_WEEK_TAG_NAME, issueNumber);
       await ok.removeLabelFromIssue(constants.OVERDUE_TAG_NAME, issueNumber);
     }
@@ -59,7 +63,7 @@ async function run() {
         console.log('\tokaddingoverduetag');
       } else {
         console.log('\tokwereintheelseclause');
-        await removeDueLabels();
+        await removeDueLabels(issue.number);
       }
     }
   } catch (err) {
