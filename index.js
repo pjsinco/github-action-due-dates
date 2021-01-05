@@ -4,9 +4,15 @@ const github = require('@actions/github');
 const moment = require('moment');
 
 function hoursToDue(date) {
-  const eventDate = moment(date).utcOffset(-6);
-  const today = moment().utcOffset(-6);
+  const eventDate = moment(date);
+  const today = moment();
   return eventDate.diff(today, 'hours');
+}
+
+function daysToDue(date) {
+  const eventDate = moment(date);
+  const today = moment();
+  return eventDate.diff(today, 'days');
 }
 
 const context = github.context;
@@ -32,12 +38,11 @@ async function run() {
 
     for (const issue of results) {
       const hoursUntilDueDate = hoursToDue(issue.due);
+      const daysUntilDueDate = daysToDue(issue.due);
       console.log(issue.title);
-      const dueDate = moment(issue.due)
-        .utcOffset(-6)
-        .format('YYYY-MM-DD');
+      const dueDate = moment(issue.due).format('YYYY-MM-DD');
       console.log(
-        `\tDue on ${dueDate} (compare with ${issue.due}), in ${hoursUntilDueDate} hours`
+        `\tDue on ${dueDate} (compare with ${issue.due}), in ${daysUntilDueDate} days (${hoursUntilDueDate} hours)`
       );
     }
   } catch (err) {
