@@ -49,11 +49,11 @@ async function run() {
         `\tDue on ${dueDate}, in ${daysUntilDueDate} days. Today is ${today}.`
       );
 
-      if (daysUntilDueDate <= 7 && daysUntilDueDate > 0) {
+      if (daysUntilDueDate <= 7 && daysUntilDueDate >= 0) {
         await removeDueLabels(issue.number);
         await ok.addLabelToIssue(issue.number, [constants.NEXT_WEEK_TAG_NAME]);
         console.log('\tokaddingnextweektag');
-      } else if (daysUntilDueDate <= 0) {
+      } else if (daysUntilDueDate < 0) {
         await removeDueLabels(issue.number);
         await ok.addLabelToIssue(issue.number, [constants.OVERDUE_TAG_NAME]);
         console.log('\tokaddingoverduetag');
