@@ -4,14 +4,14 @@ const github = require('@actions/github');
 const moment = require('moment-timezone');
 
 function hoursToDue(date) {
-  const eventDate = moment(date).local();
-  const today = moment().local();
+  const eventDate = moment(date).tz('America/Chicago');
+  const today = moment().tz('America/Chicago');
   return eventDate.diff(today, 'hours');
 }
 
 function daysToDue(date) {
-  const eventDate = moment(date).local();
-  const today = moment().local();
+  const eventDate = moment(date).tz('America/Chicago');
+  const today = moment().tz('America/Chicago');
   return eventDate.diff(today, 'days');
 }
 
@@ -36,18 +36,20 @@ async function run() {
 
     //console.log('okissueswithduedates', results);
     // TODO debugging only
-    const today = moment().local();
+    const today = moment().tz('America/Chicago');
 
     for (const issue of results) {
       const hoursUntilDueDate = hoursToDue(issue.due);
       const daysUntilDueDate = daysToDue(issue.due);
       console.log(issue.title);
-      const dueDate = moment(issue.due).local();
+      const dueDate = moment(issue.due).tz('America/Chicago');
       console.log(
         `\tDue on ${dueDate} (compare with ${
           issue.due
         }), in ${daysUntilDueDate} days (${hoursUntilDueDate} hours). Today is ${today}. Hours until tomorrow: ${today.diff(
-          moment().add(1, 'days'),
+          moment()
+            .tz('America/Chicago')
+            .add(1, 'days'),
           'hours'
         )}`
       );
