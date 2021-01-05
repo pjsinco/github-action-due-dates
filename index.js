@@ -48,7 +48,10 @@ async function run() {
           issue.due
         }), in ${daysUntilDueDate} days (${hoursUntilDueDate} hours). Today is ${today.format(
           'YYYY-MM-DD'
-        )}.`
+        )}. Hours until tomorrow: ${today.diff(
+          moment().add(1, 'days'),
+          'hours'
+        )}`
       );
     }
   } catch (err) {
