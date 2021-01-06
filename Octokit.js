@@ -36,9 +36,7 @@ module.exports = class Octokit {
       issue_number: issueNumber,
     });
 
-    console.log('\tokinsidehasoverduelabel: ', data);
-
-    return data.includes(OVERDUE_TAG_NAME);
+    return data.map(item => item.name).includes(OVERDUE_TAG_NAME);
   }
 
   async hasNextWeekLabel(issueNumber) {
@@ -48,9 +46,7 @@ module.exports = class Octokit {
       issue_number: issueNumber,
     });
 
-    console.log('\tokinsidehasnextweeklabel', data);
-
-    return data.includes(NEXT_WEEK_TAG_NAME);
+    return data.map(item => item.name).includes(NEXT_WEEK_TAG_NAME);
   }
 
   async addLabelToIssue(issueNumber, labels) {
