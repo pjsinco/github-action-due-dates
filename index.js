@@ -60,17 +60,42 @@ async function run() {
         );
 
         if (daysUntilDueDate <= 7 && daysUntilDueDate >= 0) {
-          await removeDueLabels(issue.number);
-          await ok.addLabelToIssue(issue.number, [
+          // We have an item due in the next week
+
+          console.log('\tokneedsnextweektag');
+
+          if (!ok.hasNextWeekLabel(issue.number)) {
+            console.log('\t\tokdoesnthavenextweeklabelsoletsaddone');
+            await ok.addLabelToIssue(issue.number, [
+              constants.NEXT_WEEK_TAG_NAME,
+            ]);
+          } else {
+            console.log('\t\tokalreadyhasnextweeklabel');
+          }
+
+          // Remove an overdue label if it has one
+          await ok.removeLabelFromIssue(issue.number, [
+            constants.OVERDUE_TAG_NAME,
+          ]);
+        } else if (daysUntilDueDate < 0) {
+          // We have an overdue item
+
+          console.log('\tokneedoverduelabel');
+          if (!ok.hasOverdueLabel(issue.number)) {
+            console.log('\t\tokdoesnthaveoverduelabelsoletsaddone');
+            await ok.addLabelToIssue(issue.number, [
+              constants.OVERDUE_TAG_NAME,
+            ]);
+          } else {
+            console.log('\t\tokalreadyhasnextweeklabel');
+          }
+
+          // Remove a next-week label if it has one
+          await ok.removeLabelFromIssue(issue.number, [
             constants.NEXT_WEEK_TAG_NAME,
           ]);
-          console.log('\tokaddingnextweektag');
-        } else if (daysUntilDueDate < 0) {
-          await removeDueLabels(issue.number);
-          await ok.addLabelToIssue(issue.number, [constants.OVERDUE_TAG_NAME]);
-          console.log('\tokaddingoverduetag');
         } else {
-          console.log('\tokwereintheelseclause');
+          console.log('\tokwereintheelseclauseandthereshouldbenolabels');
           await removeDueLabels(issue.number);
         }
       } else {

@@ -2,6 +2,7 @@ const github = require('@actions/github');
 const core = require('@actions/core');
 const fm = require('front-matter');
 const OVERDUE_TAG_NAME = require('./constants').OVERDUE_TAG_NAME;
+const NEXT_WEEK_TAG_NAME = require('./constants').NEXT_WEEK_TAG_NAME;
 
 module.exports = class Octokit {
   constructor(token, owner, repo) {
@@ -26,6 +27,26 @@ module.exports = class Octokit {
       issue_number: issueNumber,
     });
     return data;
+  }
+
+  async hasOverdueLabel(issueNumber) {
+    const { data } = await this.client.issues.listLabelsOnIssue({
+      owner: this.owner,
+      repo: this.repo,
+      issueNumber,
+    });
+
+    return data.includes(OVERDUE_TAG_NAME);
+  }
+
+  async hasNextWeekLabel(issueNumber) {
+    const { data } = await this.client.issues.listLabelsOnIssue({
+      owner: this.owner,
+      repo: this.repo,
+      issueNumber,
+    });
+
+    return data.includes(NEXT_WEEK_TAG_NAME);
   }
 
   async hasDueDateLabels(issueNumber) {
