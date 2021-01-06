@@ -64,43 +64,51 @@ async function run() {
 
           console.log('\tokneedsnextweektag');
 
-          if (!ok.hasNextWeekLabel(issue.number)) {
+          if (
+            !(await ok
+              .hasNextWeekLabel(issue.number)
+              .catch(err => console.error(err)))
+          ) {
             console.log('\t\tokdoesnthavenextweeklabelsoletsaddone');
-            await ok.addLabelToIssue(issue.number, [
-              constants.NEXT_WEEK_TAG_NAME,
-            ]);
+            await ok
+              .addLabelToIssue(issue.number, [constants.NEXT_WEEK_TAG_NAME])
+              .catch(err => console.error(err));
           } else {
             console.log('\t\tokalreadyhasnextweeklabel');
           }
 
           // Remove an overdue label if it has one
-          await ok.removeLabelFromIssue(issue.number, [
-            constants.OVERDUE_TAG_NAME,
-          ]);
+          await ok
+            .removeLabelFromIssue(issue.number, [constants.OVERDUE_TAG_NAME])
+            .catch(err => console.error(err));
         } else if (daysUntilDueDate < 0) {
           // We have an overdue item
 
           console.log('\tokneedoverduelabel');
-          if (!ok.hasOverdueLabel(issue.number)) {
+          if (
+            !(await ok
+              .hasOverdueLabel(issue.number)
+              .catch(err => console.error(err)))
+          ) {
             console.log('\t\tokdoesnthaveoverduelabelsoletsaddone');
-            await ok.addLabelToIssue(issue.number, [
-              constants.OVERDUE_TAG_NAME,
-            ]);
+            await ok
+              .addLabelToIssue(issue.number, [constants.OVERDUE_TAG_NAME])
+              .catch(err => console.error(err));
           } else {
             console.log('\t\tokalreadyhasnextweeklabel');
           }
 
           // Remove a next-week label if it has one
-          await ok.removeLabelFromIssue(issue.number, [
-            constants.NEXT_WEEK_TAG_NAME,
-          ]);
+          await ok
+            .removeLabelFromIssue(issue.number, [constants.NEXT_WEEK_TAG_NAME])
+            .catch(err => console.error(err));
         } else {
           console.log('\tokwereintheelseclauseandthereshouldbenolabels');
-          await removeDueLabels(issue.number);
+          await removeDueLabels(issue.number).catch(err => console.error(err));
         }
       } else {
         // For issues with no due date, remove any due labels
-        await removeDueLabels(issue.number);
+        await removeDueLabels(issue.number).catch(err => console.error(err));
       }
     }
   } catch (err) {
