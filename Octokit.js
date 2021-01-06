@@ -49,15 +49,6 @@ module.exports = class Octokit {
     return data.includes(NEXT_WEEK_TAG_NAME);
   }
 
-  async hasDueDateLabels(issueNumber) {
-    const { data } = await this.client.issues.listLabelsOnIssue({
-      owner: this.owner,
-      repo: this.repo,
-      issueNumber,
-    });
-    return data;
-  }
-
   async addLabelToIssue(issueNumber, labels) {
     const { data } = await this.client.issues.addLabels({
       owner: this.owner,
