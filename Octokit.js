@@ -33,7 +33,7 @@ module.exports = class Octokit {
     const { data } = await this.client.issues.listLabelsOnIssue({
       owner: this.owner,
       repo: this.repo,
-      issueNumber,
+      issue_number: issueNumber,
     });
 
     return data.includes(OVERDUE_TAG_NAME);
@@ -43,7 +43,7 @@ module.exports = class Octokit {
     const { data } = await this.client.issues.listLabelsOnIssue({
       owner: this.owner,
       repo: this.repo,
-      issueNumber,
+      issue_number: issueNumber,
     });
 
     return data.includes(NEXT_WEEK_TAG_NAME);
