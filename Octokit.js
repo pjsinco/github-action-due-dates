@@ -36,6 +36,8 @@ module.exports = class Octokit {
       issue_number: issueNumber,
     });
 
+    console.log('\tokinsidehasoverduelabel: ', data);
+
     return data.includes(OVERDUE_TAG_NAME);
   }
 
@@ -45,6 +47,8 @@ module.exports = class Octokit {
       repo: this.repo,
       issue_number: issueNumber,
     });
+
+    console.log('\tokinsidehasnextweeklabel', data);
 
     return data.includes(NEXT_WEEK_TAG_NAME);
   }
