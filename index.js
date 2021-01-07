@@ -55,7 +55,7 @@ async function run() {
 
         // TODO debugging only
         console.log(
-          issue.title,
+          `\n${issue.title}`,
           `\n\tDue in ${daysUntilDueDate} days, on ${dueDate}.\n\tToday is ${today}.`
         );
 
@@ -74,7 +74,7 @@ async function run() {
               .catch(err => console.error(err)))
           ) {
             console.log(
-              '\t\tDoesn\'t already have a "NEXT WEEK" label, so let\'s add one.'
+              '\t\t** Doesn\'t have a "NEXT WEEK" label, so let\'s add one. **'
             );
             await ok
               .addLabelToIssue(issue.number, [constants.NEXT_WEEK_TAG_NAME])
@@ -101,7 +101,7 @@ async function run() {
               .catch(err => console.error(err)))
           ) {
             console.log(
-              '\t\tDoesn\'t have an "OVERDUE" label, so let\'s add one.'
+              '\t\t** Doesn\'t have an "OVERDUE" label, so let\'s add one. **'
             );
             await ok
               .addLabelToIssue(issue.number, [constants.OVERDUE_TAG_NAME])

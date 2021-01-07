@@ -39,27 +39,27 @@ module.exports = class Octokit {
     return data.map(item => item.name).includes(OVERDUE_TAG_NAME);
   }
 
-  async hasNextWeekLabel(issueNumber) {
+  async hasNextWeekLabel(issue_number) {
     const { data } = await this.client.issues.listLabelsOnIssue({
       owner: this.owner,
       repo: this.repo,
-      issue_number: issueNumber,
+      issue_number,
     });
 
     return data.map(item => item.name).includes(NEXT_WEEK_TAG_NAME);
   }
 
-  async addLabelToIssue(issueNumber, labels) {
+  async addLabelToIssue(issue_number, labels) {
     const { data } = await this.client.issues.addLabels({
       owner: this.owner,
       repo: this.repo,
-      issue_number: issueNumber,
+      issue_number,
       labels,
     });
     return data;
   }
 
-  async removeLabelFromIssue(name, issue_number) {
+  async removeLabelFromIssue(issue_number, name) {
     try {
       const { data } = await this.client.issues.removeLabel({
         owner: this.owner,
